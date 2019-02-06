@@ -20,20 +20,16 @@
 
   //ここにMysqlを使った処理を書く
 
-  //記事の取得
+  //記事とコメントの取得
   $blog_id = 1;
   $sql = 'SELECT * FROM post
-    WHERE id = ' . $blog_id . '';
-  $result = mysqli_query($database, $sql);
-  $blog_data = mysqli_fetch_assoc($result);
-
-  //コメントの取得
-  $sql = 'SELECT * FROM comment
-    WHERE post_id = ' . $blog_id . '
-    ORDER BY id DESC';
+    RIGHT JOIN comment
+    ON post.id = comment.post_id
+    WHERE post.id = ' . $blog_id . '
+    ORDER BY comment.id DESC';
   $result = mysqli_query($database, $sql);
   while ($row = mysqli_fetch_assoc($result)) {
-    $blog_comment[] = $row;
+    $blog_post[] = $row;
   }
 
   mysqli_close($database);
@@ -59,17 +55,17 @@
     <div class="wrapper">
       <div id="main">
         <div class="post">
-          <h2><?php echo $blog_data['title'] ?></h2>
-          <p><?php echo ($blog_data['content']) ?></p>
-          <?php foreach ($blog_comment as $comment) {?>
+          <h2><?php echo $blog_post[0]['title'] ?></h2>
+          <p><?php echo ($blog_post[0]['content']) ?></p>
+          <?php foreach ($blog_post as $comment) {?>
             <div class="comment">
               <h3><?php echo ($comment['name']) ?></h3>
               <p><?php echo ($comment['content']) ?></p>
             </div>
           <?php } ?>
           <p class="commment_link">
-            投稿日：<?php echo $blog_data['created_at'] ?>
-            <a href="comment.php?id=<?php echo $blog_data['id'] ?>">コメント</a>
+            投稿日：<?php echo $blog_post[0]['created_at'] ?>
+            <a href="comment.php?id=<?php echo $blog_post[0]['id'] ?>">コメント</a>
           </p>
         </div>
       </div>
