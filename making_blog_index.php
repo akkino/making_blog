@@ -1,4 +1,33 @@
 <!DOCTYPE html>
+<?php
+  function h($str) {
+    return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+  }
+
+  $host = 'localhost';
+  $username = 'root';
+  $password = '';
+  $db_name = 'making_blog';
+
+  $database = mysqli_connect($host, $username, $password, $db_name);
+
+  if ($database == false) {
+    die('Connect Error (' . mysqli_connect_errno() . ')' .mysqli_connect_error());
+  }
+
+  $charset = '$utf8';
+  mysqli_set_charset($database, $charset);
+
+  //ここにMysqlを使った処理を書く
+
+  //記事の取得
+  $sql = 'SELECT * FROM post ORDER BY no DESC';
+  $result = mysqli_query($database, $sql);
+  $blog_list = mysqli_fetch_assoc($result);
+
+  mysqli_close($database);
+ ?>
+
 <html lang="ja">
   <head>
     <meta charset="utf-8">
@@ -12,7 +41,7 @@
           <a href="./making_blog_index.php">making blog</a>
         </div>
         <nav>
-          ここに他のページリンク
+          <a href="#">ここに他のページリンク</a>
         </nav>
       </div>
     </header>
