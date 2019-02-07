@@ -12,25 +12,18 @@
   $database = mysqli_connect($host, $username, $password, $db_name);
 
   if ($database == false) {
-    die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
+    die('Connect Error (' . mysqli_connect_errno() . ')' .mysqli_connect_error());
   }
 
-  $charset = 'utf8';
+  $charset = '$utf8';
   mysqli_set_charset($database, $charset);
 
   //ここにMysqlを使った処理を書く
 
-  //記事とコメントの取得
-  $blog_id = 1;
-  $sql = 'SELECT * FROM post
-    RIGHT JOIN comment
-    ON post.id = comment.post_id
-    WHERE post.id = ' . $blog_id . '
-    ORDER BY comment.id DESC';
+  //記事の取得
+  $sql = 'SELECT * FROM post ORDER BY no DESC';
   $result = mysqli_query($database, $sql);
-  while ($row = mysqli_fetch_assoc($result)) {
-    $blog_post[] = $row;
-  }
+  $blog_list = mysqli_fetch_assoc($result);
 
   mysqli_close($database);
  ?>
@@ -48,25 +41,18 @@
           <a href="./index.php">making blog</a>
         </div>
         <nav>
-          ここに他のページリンク
+          <a href="#">ここに他のページリンク</a>
         </nav>
       </div>
     </header>
+    <div id="cover">
+      <h1 id="cover_title">自分のブログを作ってみよう！</h1>
+
+    </div>
     <div class="wrapper">
       <div id="main">
-        <div class="post">
-          <h2><?php echo $blog_post[0]['title'] ?></h2>
-          <p><?php echo ($blog_post[0]['content']) ?></p>
-          <?php foreach ($blog_post as $comment) {?>
-            <div class="comment">
-              <h3><?php echo ($comment['name']) ?></h3>
-              <p><?php echo ($comment['content']) ?></p>
-            </div>
-          <?php } ?>
-          <p class="commment_link">
-            投稿日：<?php echo $blog_post[0]['created_at'] ?>
-            <a href="comment.php?id=<?php echo $blog_post[0]['id'] ?>">コメント</a>
-          </p>
+        <div id="blog_list" class="clearfix">
+          ここにブログの記事一覧
         </div>
       </div>
     </div>
