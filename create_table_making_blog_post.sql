@@ -2,5 +2,6 @@ CREATE TABLE post (
   id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
   title VARCHAR(100),
   content text,
+  blog_image VARCHAR(100),
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

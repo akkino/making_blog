@@ -14,16 +14,26 @@
   mysqli_set_charset($database, $charset);
 
 
-  $error = $title = $content = '';
-  if (@$_POST['submit']) {
-    $title = $_POST['title'];
+  $error = $title = $content = $image_path = '';
+  if (@$_POST['submit_add_blog']) {
+    $title = $_POST['add_blog_title'];
     $content = $_POST['content'];
     if (!$title) $error .= 'タイトルがありません。<br>';
     if (mb_strlen($title) > 80) $error .= 'タイトルが長すぎます。<br>';
     if (!$content) $error .= '本文がありません。<br>';
     if (!$error) {
-      $sql = 'INSERT INTO post (title, content) VALUES (' . $title . ', ' . $content . ')';
-      $result = mysqli_query($database, $sql);
+      //画像データの登録
+      if ($_FILES['add_blog_image']) {
+        $file_name = $_FILES['add_blog_image']['name'];
+        $image_path = './uploads/' . $file_name;
+        move_uploaded_file($_FILES['add_blog_image']['tmp_name'], $image_path);
+      }
+      //ブログを新規登録する
+      $sql = 'INSERT INTO post (title, content, blog_image) VALUES (?, ?, ?)';
+      $statement = mysqli_prepare($database, $sql);
+      mysqli_stmt_bind_param($statement, 'sss', $title, $content, $image_path);
+      mysqli_stmt_execute($statement);
+      mysqli_stmt_close($statement);
       header('Location: index.php');
       }
     }
