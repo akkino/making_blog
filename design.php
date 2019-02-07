@@ -55,17 +55,17 @@
     <div class="wrapper">
       <div id="main">
         <div class="post">
-          <h2><?php echo $blog_post[0]['title'] ?></h2>
-          <p><?php echo ($blog_post[0]['content']) ?></p>
+          <h2><?php print h($blog_post[0]['title']) ?></h2>
+          <p><?php print h($blog_post[0]['content']) ?></p>
           <?php foreach ($blog_post as $comment) {?>
             <div class="comment">
-              <h3><?php echo ($comment['name']) ?></h3>
-              <p><?php echo ($comment['content']) ?></p>
+              <h3><?php print h($comment['name']) ?></h3>
+              <p><?php print h($comment['content']) ?></p>
             </div>
           <?php } ?>
           <p class="commment_link">
-            投稿日：<?php echo $blog_post[0]['created_at'] ?>
-            <a href="comment.php?id=<?php echo $blog_post[0]['id'] ?>">コメント</a>
+            投稿日：<?php print h($blog_post[0]['created_at']) ?>
+            <a href="comment.php?id=<?php print ($blog_post[0]['id']) ?>">コメント</a>
           </p>
         </div>
       </div>
