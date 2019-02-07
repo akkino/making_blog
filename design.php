@@ -19,11 +19,23 @@
   mysqli_set_charset($database, $charset);
 
   //ここにMysqlを使った処理を書く
+  //blog_idの引継ぎ
+  $blog_id = $error = '';
+  if (@$_GET['post_id']) {
+    $blog_id = strip_tags($_GET['post_id']);
+  }
 
   //記事とコメントの取得
-  $blog_id = 1;
-  $sql = 'SELECT * FROM post
-    RIGHT JOIN comment
+  $sql = 'SELECT post.id as post_id,
+    title,
+    post.content as post_content,
+    post.created_at as post_created_at,
+    comment.id as comment_id,
+    name,
+    comment.content as comment_content,
+    comment.created_at as comment_created_at
+    FROM post
+    LEFT JOIN comment
     ON post.id = comment.post_id
     WHERE post.id = ' . $blog_id . '
     ORDER BY comment.id DESC';
@@ -56,16 +68,17 @@
       <div id="main">
         <div class="post">
           <h2><?php print h($blog_post[0]['title']) ?></h2>
-          <p><?php print h($blog_post[0]['content']) ?></p>
+          <p><?php print h($blog_post[0]['post_content']) ?></p>
           <?php foreach ($blog_post as $comment) {?>
             <div class="comment">
               <h3><?php print h($comment['name']) ?></h3>
-              <p><?php print h($comment['content']) ?></p>
+              <p><?php print h($comment['comment_content']) ?></p>
+              <p><?php print h($comment['comment_created_at']) ?></p>
             </div>
           <?php } ?>
           <p class="commment_link">
-            投稿日：<?php print h($blog_post[0]['created_at']) ?>
-            <a href="comment.php?id=<?php print ($blog_post[0]['id']) ?>">コメント</a>
+            投稿日：<?php print h($blog_post[0]['post_created_at']) ?>
+            <a href="comment.php?id=<?php print ($blog_post[0]['post_id']) ?>">コメント</a>
           </p>
         </div>
       </div>

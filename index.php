@@ -20,10 +20,9 @@
 
   //ここにMysqlを使った処理を書く
 
-  //記事の取得
-  $sql = 'SELECT * FROM post ORDER BY no DESC';
+  //全ての記事の取得
+  $sql = 'SELECT * FROM post ORDER BY created_at DESC';
   $result = mysqli_query($database, $sql);
-  $blog_list = mysqli_fetch_assoc($result);
 
   mysqli_close($database);
  ?>
@@ -52,7 +51,35 @@
     <div class="wrapper">
       <div id="main">
         <div id="blog_list" class="clearfix">
-          ここにブログの記事一覧
+<?php
+          if ($result) {
+            while ($record = mysqli_fetch_assoc($result)) {
+              $id = $record['id'];
+              $title = $record['title'];
+              $created_at = $record['created_at'];
+?>
+              <div class="blog_item">
+                <div class="blog_image">
+
+                </div>
+                <div class="blog_detail">
+                  <div class="blog_title">
+                    <form method="get" name="go_design" action="./design.php">
+                      <input type="hidden" name="post_id" value="<?php print h($id); ?>">
+                      <a href="./design.php?post_id=<?php print h($id); ?>"><?php print h($title); ?></a>
+                    </form>
+                  </div>
+                  <div class="blog_created_at">
+                    <?php print h($created_at); ?>
+                  </div>
+                </div>
+              </div>
+<?php
+            }
+            mysqli_free_result($result);
+          }
+?>
+          </form>
         </div>
       </div>
     </div>
