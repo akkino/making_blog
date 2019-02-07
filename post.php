@@ -24,10 +24,10 @@
     if (!$error) {
       $sql = 'INSERT INTO post (title, content) VALUES (' . $title . ', ' . $content . ')';
       $result = mysqli_query($database, $sql);
-      header('Location: making_blog_index.php');
+      header('Location: index.php');
       }
     }
-    require 'making_blog_t_post.php';
+    require 't_post.php';
 
     mysqli_close($database);
   ?>

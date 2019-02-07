@@ -45,7 +45,7 @@
     <header>
       <div id="header">
         <div id="logo">
-          <a href="./making_blog_index.php">making blog</a>
+          <a href="./index.php">making blog</a>
         </div>
         <nav>
           ここに他のページリンク

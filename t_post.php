@@ -9,7 +9,7 @@
     <header>
       <div id="header">
         <div id="logo">
-          <a href="./making_blog_index.php">making blog</a>
+          <a href="./index.php">making blog</a>
         </div>
         <nav>
           ここに他のページリンク
@@ -18,7 +18,7 @@
     </header>
     <div class="wrapper">
       <div id="main">
-        <form method="post" action="making_blog_post.php">
+        <form method="post" action="post.php">
           <div class="post">
             <h2>記事投稿</h2>
             <p>題名</p>
