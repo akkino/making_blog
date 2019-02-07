@@ -19,6 +19,14 @@
   mysqli_set_charset($database, $charset);
 
   //ここにMysqlを使った処理を書く
+  //記事の削除
+  if ($_POST['submit_blog_delete']) {
+    $sql = 'DELETE FROM post WHERE id=?';
+    $statement = mysqli_prepare($database, $sql);
+    mysqli_stmt_bind_param($statement, 'i', $_POST['post_id']);
+    mysqli_stmt_execute($statement);
+    mysqli_stmt_close($statement);
+  }
 
   //全ての記事の取得
   $sql = 'SELECT * FROM post ORDER BY created_at DESC';
@@ -69,6 +77,12 @@
                       <a href="./design.php?post_id=<?php print h($id); ?>"><?php print h($title); ?></a>
                     </form>
                   </div>
+                  <form action="index.php" method="post">
+                    <input type="hidden" name="post_id" value="<?php print h($id); ?>">
+                    <div class="blog_delete">
+                      <input type="submit" name="submit_blog_delete" value="削除する">
+                    </div>
+                  </form>
                   <div class="blog_created_at">
                     <?php print h($created_at); ?>
                   </div>
