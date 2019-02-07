@@ -12,7 +12,7 @@
           <a href="./index.php">making blog</a>
         </div>
         <nav>
-          ここに他のページリンク
+          <a href="./t_post.php">記事投稿</a>
         </nav>
       </div>
     </header>

@@ -56,7 +56,7 @@
           <a href="./index.php">making blog</a>
         </div>
         <nav>
-          ここに他のページリンク
+          <a href="./t_post.php">記事投稿</a>
         </nav>
       </div>
     </header>
@@ -74,7 +74,7 @@
           <?php } ?>
           <p class="commment_link">
             投稿日：<?php print h($blog_post['created_at']) ?>
-            <a href="comment.php?id=<?php print ($blog_post['id']) ?>">コメント</a>
+            <a href="comment.php?id=<?php print h($blog_post['id']) ?>">コメント</a>
           </p>
         </div>
       </div>

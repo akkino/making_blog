@@ -40,7 +40,7 @@
           <a href="./index.php">making blog</a>
         </div>
         <nav>
-          <a href="#">ここに他のページリンク</a>
+          <a href="./t_post.php">記事投稿</a>
         </nav>
       </div>
     </header>

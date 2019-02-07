@@ -26,7 +26,7 @@
       mysqli_stmt_bind_param($statement, 'sss', $post_id, $name, $content);
       mysqli_stmt_execute($statement);
       mysqli_stmt_close($statement);
-      header('Location: index.php');
+      header("Location: design.php?post_id=".$post_id);
       exit();
     }
   }
