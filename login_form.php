@@ -30,5 +30,6 @@
       <input type="submit" value="ログインする">
 
     </form>
+    <p><a href="registration_mail_form.php">アカウント登録はこちらから</a></p>
   </body>
 </html>

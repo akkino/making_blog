@@ -44,13 +44,13 @@ else {
 
 if (count($errors) == 0) {
   $urltoken = hash('sha256',uniqid(rand(),1));
-  $url = "http://◯◯◯.co.jp/registration_form.php"."?urltoken=".$urltoken;
+  $url = "http://192.168.33.10:8000/registration_form.php"."?urltoken=".$urltoken;
 
   //ここでデータベースに登録する
   try {
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $statement = $dbh->prepare("INSERT INTO pre_user (urltoken,email,date) VALUES (:urltoken,:mail,:now())");
+    $statement = $dbh->prepare("INSERT INTO pre_user (urltoken,email,date) VALUES (:urltoken,:mail,now())");
 
     //プレースホルダへ実際の値を設定する
     $statement->bindValue(':urltoken', $urltoken, PDO::PARAM_STR);
@@ -71,7 +71,7 @@ if (count($errors) == 0) {
   //Return-Pathに指定するメールアドレス
   $returnMail = "web@sample.com";
 
-  $name = "making_blog"
+  $name = "making_blog";
   $mail = 'web@sample.com';
   $subject = "【making_blog】会員登録用URLのお知らせ";
 
@@ -122,7 +122,7 @@ EOM;
       <p><?=$message?></p>
 
       <p>↓このURLが記載されたメールが届きます。</p>
-      <a href="<?=url?>"><?=$url?></a>
+      <a href="<?=$url?>"><?=$url?></a>
 
     <?php elseif(count($errors) > 0): ?>
 

@@ -19,7 +19,7 @@ if (empty($_GET)) {
 }
 else {
   //GETデータを変数に入れる
-  $urltoken = isset($_GET[urltoken]) ? $_GET[urltoken] : NULL;
+  $urltoken = isset($_GET['urltoken']) ? $_GET['urltoken'] : NULL;
   //メール入力判定
   if ($urltoken == '') {
     $errors['urltoken'] = "もう一度登録をやり直してください。";
@@ -39,7 +39,7 @@ else {
       //24時間以内に仮登録され、本登録されていないトークンの場合
       if ($row_count == 1) {
         $mail_array = $statement->fetch();
-        $mail = $mail_array[mail];
+        $mail = $mail_array['email'];
         $_SESSION['mail'] = $mail;
       }
       else {
@@ -68,11 +68,11 @@ else {
 
     <?php if (count($errors) === 0): ?>
 
-    <form action="regstration_check.php" method="post">
+    <form action="registration_check.php" method="post">
 
       <p>メールアドレス：<?=htmlspecialchars($mail, ENT_QUOTES, 'UTF-8')?></p>
       <p>アカウント名：<input type="text" name="account"></p>
-      <p>パスワード：<input type="text" name="passwprd"></p>
+      <p>パスワード：<input type="text" name="password"></p>
 
       <input type="hidden" name="token" value="<?=$token?>">
       <input type="submit" value="確認する">
@@ -82,11 +82,11 @@ else {
   <?php elseif (count($errors) > 0): ?>
 
 <?php
-          foreach ($erros as $value) {
+          foreach ($errors as $value) {
             echo "<p>".$value."</p>";
           }
 ?>
 
 <?php endif; ?>
   </body>
-</html>    
+</html>
