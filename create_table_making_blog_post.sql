@@ -1,5 +1,6 @@
 CREATE TABLE post (
   id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  user_id INT NOT NULL,
   title VARCHAR(100),
   content text,
   blog_image VARCHAR(100),

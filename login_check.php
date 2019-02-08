@@ -74,8 +74,6 @@ if(count($errors) === 0) {
     if($row = $statement->fetch()){
 
 			$password_hash = $row[password];
-var_dump($password_hash);
-var_dump($password);
 
       //パスワードが一致
       if (password_verify($password, $password_hash)) {

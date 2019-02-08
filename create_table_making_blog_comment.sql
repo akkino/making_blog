@@ -1,5 +1,6 @@
 CREATE TABLE comment (
   id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  user_id INT NOT NULL,
   post_id INT NOT NULL,
   name VARCHAR(100),
   content TEXT,

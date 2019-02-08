@@ -15,43 +15,80 @@ if (!isset($_SESSION["account"])) {
     return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
   }
 
-  $host = 'localhost';
-  $username = 'root';
-  $password = '';
-  $db_name = 'making_blog';
+  require_once("db.php");
+  $dbh = db_connect();
 
-  $database = mysqli_connect($host, $username, $password, $db_name);
-
-  if ($database == false) {
-    die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
-  }
-
-  $charset = 'utf8';
-  mysqli_set_charset($database, $charset);
-
-  //ここにMysqlを使った処理を書く
   //blog_idの引継ぎ
-  $blog_id = $error = '';
-  if (@$_GET['post_id']) {
-    $blog_id = strip_tags($_GET['post_id']);
+  $post_id = $user_id = '';
+  $errors = array();
+
+  if (empty($_GET)) {
+    header("Location: index.php");
+    exit;
+  }
+  else {
+    $post_id = isset($_GET['post_id']) ? $_GET['post_id'] : NULL;
+
+    //エラー処理はここに追加
   }
 
-  //記事の取得
-  $sql = 'SELECT * FROM post
-    WHERE id = ' . $blog_id . '';
-  $result = mysqli_query($database, $sql);
-  $blog_post = mysqli_fetch_assoc($result);
+  if (count($errors) === 0) {
+    //記事の取得
+    try {
+      $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-  //コメントの取得
-  $sql = 'SELECT * FROM comment
-    WHERE post_id = ' . $blog_id . '
-    ORDER BY id ';
-  $result = mysqli_query($database, $sql);
-  while ($row = mysqli_fetch_assoc($result)) {
-    $blog_comment[] = $row;
+      $statement = $dbh->prepare("SELECT * FROM post WHERE id=(:post_id)");
+      $statement->bindValue(':post_id', $post_id, PDO::PARAM_STR);
+      $statement->execute();
+
+      $blog_post = $statement->fetch();
+
+      $statement = null;
+    }
+    catch (PDOException $e) {
+      print('Error:' . $e->getMessage());
+      die();
+    }
+
+    //コメントの取得
+    try {
+      $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+      $statement = $dbh->prepare("SELECT * FROM comment WHERE post_id=(:post_id) ORDER BY id");
+      $statement->bindValue(':post_id', $post_id, PDO::PARAM_STR);
+      $statement->execute();
+
+      $blog_comment = $statement->fetchALL();
+
+      $statement = null;
+    }
+    catch (PDOException $e) {
+      print('Error:' . $e->getMessage());
+      die();
+    }
+
+    //投稿者の取得
+    try {
+      $user_id = $blog_post['user_id'];
+
+      $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+      $statement = $dbh->prepare("SELECT id, account FROM user WHERE id=(:user_id)");
+      $statement->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+      $statement->execute();
+
+      $blog_user = $statement->fetch();
+
+      $dbh = null;
+    }
+    catch (PDOException $e) {
+      print('Error:' . $e->getMessage());
+      die();
+    }
   }
+  var_dump($user_id);
+  var_dump($blog_user);
 
-  mysqli_close($database);
  ?>
 
 <html lang="ja">
@@ -81,6 +118,16 @@ if (!isset($_SESSION["account"])) {
           <h2><?php print h($blog_post['title']); ?></h2>
           <p><?php print h($blog_post['content']); ?></p>
           <img src="<?php print h($blog_post['blog_image']); ?>" alt="">
+
+          <?php if($account == $blog_user['account']) { ?>
+            <form action="index.php" method="post">
+              <input type="hrdden" name="post_id" value="<?=$post_id?>">
+              <div class="blog_delete">
+                <input type="submit" name="submit_blog_delete" value="削除する"
+              </div>
+            </form>
+          <?php } ?>
+
           <?php foreach ($blog_comment as $comment) {?>
             <div class="comment">
               <h3><?php print h($comment['name']); ?></h3>
