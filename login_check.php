@@ -82,6 +82,7 @@ if(count($errors) === 0) {
         session_regenerate_id(true);
 
         $_SESSION['account'] = $account;
+        $_SESSION['user_id'] = $row['id'];
         header("Location: index.php");
         exit();
       }

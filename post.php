@@ -1,43 +1,58 @@
 <?php
-  $host = 'localhost';
-  $username = 'root';
-  $password = '';
-  $db_name = 'making_blog';
+session_start();
 
-  $database = mysqli_connect($host, $username, $password, $db_name);
+header("Content-type: text/html; charset=utf-8");
 
-  if ($database == false) {
-    die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
-  }
+if (!isset($_SESSION["account"])) {
+  header("Location: login_form.php");
+  exit();
+}
 
-  $charset = 'utf8';
-  mysqli_set_charset($database, $charset);
-
-
-  $error = $title = $content = $image_path = '';
+  $errors = array();
+  $title = $content = $user_id = $image_path = '';
   if (@$_POST['submit_add_blog']) {
     $title = $_POST['add_blog_title'];
     $content = $_POST['content'];
-    if (!$title) $error .= 'タイトルがありません。<br>';
-    if (mb_strlen($title) > 80) $error .= 'タイトルが長すぎます。<br>';
-    if (!$content) $error .= '本文がありません。<br>';
-    if (!$error) {
+    $user_id = $_SESSION['user_id'];
+
+    if (!$title) $errors['title'] .= 'タイトルがありません。<br>';
+    if (mb_strlen($title) > 80) $errors['title_langht'] .= 'タイトルが長すぎます。<br>';
+    if (!$content) $errors['title_none'] .= '本文がありません。<br>';
+    if (!$errors) {
+
       //画像データの登録
       if ($_FILES['add_blog_image']) {
         $file_name = $_FILES['add_blog_image']['name'];
         $image_path = './uploads/' . $file_name;
         move_uploaded_file($_FILES['add_blog_image']['tmp_name'], $image_path);
       }
-      //ブログを新規登録する
-      $sql = 'INSERT INTO post (title, content, blog_image) VALUES (?, ?, ?)';
-      $statement = mysqli_prepare($database, $sql);
-      mysqli_stmt_bind_param($statement, 'sss', $title, $content, $image_path);
-      mysqli_stmt_execute($statement);
-      mysqli_stmt_close($statement);
-      header('Location: index.php');
-      }
-    }
-    require 't_post.php';
 
-    mysqli_close($database);
+      //ブログを新規登録する
+      require_once("db.php");
+      $dbh = db_connect();
+
+      try {
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $statement = $dbh->prepare("INSERT INTO post (user_id, title, content, blog_image) VALUES (:user_id, :title, :content, :blog_image)");
+        $statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $statement->bindValue(':title', $title, PDO::PARAM_STR);
+        $statement->bindValue(':content', $content, PDO::PARAM_STR);
+        $statement->bindValue(':blog_image', $image_path, PDO::PARAM_STR);
+        $statement->execute();
+
+        $dbh = null;
+
+        header('Location: index.php');
+      }
+      catch (PDOException $e) {
+        print('Error:' . $e->getMessage());
+        die();
+      }
+
+      require 't_post.php';
+
+    }
+  }
+
   ?>

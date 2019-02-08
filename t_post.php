@@ -3,7 +3,6 @@ session_start();
 
 header("Content-type: text/html; charset=utf-8");
 
-//ログイン状態のチェック
 if (!isset($_SESSION["account"])) {
   header("Location: login_form.php");
   exit();
@@ -53,7 +52,11 @@ function h($str) {
           <div class="blog_submit">
             <p><input name="submit_add_blog" type="submit" value="投稿"></p>
           </div>
-            <p><?php echo $error ?></p>
+          <?php
+            foreach($erros as $value) {
+              echo "<p>".$value."</p>";
+            }
+          ?>
           </div>
         </form>
       </div>
