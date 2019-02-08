@@ -29,17 +29,17 @@ function spaceTrim ($str) {
 $errors = array();
 
 if (empty($_POST)) {
-  header(Location: login_form.php);
+  header("Location: login_form.php");
   exit();
 }
 else {
   //POSTされたデータを各変数に入れる
   $account = isset($_POST['account']) ? $_POST['account'] : NULL;
-  $passwprd = isset($_POST['password']) ? $_POST['password'] : NULL;
+  $password = isset($_POST['password']) ? $_POST['password'] : NULL;
 
 //前後にある半角全角スペースを削除
 $account = spaceTrim($account);
-$password = spaceTrim($account);
+$password = spaceTrim($password);
 
 //アカウント入力判定
 if ($account == ''):
@@ -50,7 +50,7 @@ endif;
 
 //パスワード入力判定
 if ($password == ''):
-  $errors['password'] = "アカウントが入力されていません。";
+  $errors['password'] = "パスワードが入力されていません。";
 elseif (!preg_match('/^[0-9a-zA-Z]{5,30}$/', $_POST["password"])):
   $errors['passwprd_length'] = "パスワードは半角英数字の5文字以上30文字以下で入力してください。";
 else:
@@ -71,8 +71,11 @@ if(count($errors) === 0) {
     $statement->execute();
 
     //アカウントが一致
-    if ($row = $statement->fetch()) {
-      $password_hash = $row[password];
+    if($row = $statement->fetch()){
+
+			$password_hash = $row[password];
+var_dump($password_hash);
+var_dump($password);
 
       //パスワードが一致
       if (password_verify($password, $password_hash)) {

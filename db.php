@@ -1,8 +1,8 @@
 <?php
   function db_connect() {
-    $dsn = 'mysql:host=◯◯◯;dbname=◯◯◯;charset=utf8';
-  	$user = '◯◯◯';
-  	$password = '◯◯◯';
+    $dsn = 'mysql:host=localhost;dbname=making_blog;charset=utf8';
+  	$user = 'root';
+  	$password = '';
 
   	try{
   		$dbh = new PDO($dsn, $user, $password);

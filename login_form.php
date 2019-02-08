@@ -1,10 +1,6 @@
 <?php
   session_start();
 
-  function h($str) {
-    return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
-  }
-
   header("Content-type: text/html; charset=utf-8");
 
   //クロスサイトリクエストフォージュリ (CSRF)対策
@@ -30,7 +26,7 @@
       <p>アカウント：<input type="text" name="account" size="50"></p>
       <p>パスワード：<input type="text" name="password" size="50"></p>
 
-      <input type="hidden" name="token" value="<?php print h($token); ?>">
+      <input type="hidden" name="token" value="<?=$token?>">
       <input type="submit" value="ログインする">
 
     </form>
