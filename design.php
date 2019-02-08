@@ -86,8 +86,6 @@ if (!isset($_SESSION["account"])) {
       die();
     }
   }
-  var_dump($user_id);
-  var_dump($blog_user);
 
  ?>
 
@@ -121,7 +119,7 @@ if (!isset($_SESSION["account"])) {
 
           <?php if($account == $blog_user['account']) { ?>
             <form action="index.php" method="post">
-              <input type="hrdden" name="post_id" value="<?=$post_id?>">
+              <input type="hidden" name="post_id" value="<?=$post_id?>">
               <div class="blog_delete">
                 <input type="submit" name="submit_blog_delete" value="削除する"
               </div>
