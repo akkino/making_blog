@@ -84,7 +84,7 @@ var_dump($password);
         session_regenerate_id(true);
 
         $_SESSION['account'] = $account;
-        header("Location: login_admin.php");
+        header("Location: index.php");
         exit();
       }
       else {
