@@ -3,4 +3,4 @@ INSERT INTO user (id,password,account,email,flag) VALUES ("2","$2y$10$rLaGZ7Q8G6
 
 
 //testtarou
-//test
+//testuser

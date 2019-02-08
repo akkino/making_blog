@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
 session_start();
 
@@ -14,7 +13,7 @@ function h($str) {
   return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
 ?>
-
+<!DOCTYPE html>
 <html lang="ja">
   <head>
     <meta charset="utf-8">
@@ -46,10 +45,14 @@ function h($str) {
             <p>本文</p>
             <p><textarea name="content" rows="8" cols="40"><?php echo $content ?></textarea></p>
             <p>
-              <input type="hidden" name="post_id" value="<?php echo $post_id ?>">
-              <input name="submit" type="submit" value="投稿">
+              <input type="hidden" name="post_id" value="<?php $post_id = $_GET['id']; print h($post_id);?>">
+              <input name="submit_add_comment" type="submit" value="投稿">
             </p>
-            <p><?php echo $error ?></p>
+            <?php
+              foreach($erros as $value) {
+                echo "<p>".$value."</p>";
+              }
+            ?>
           </div>
         </form>
       </div>

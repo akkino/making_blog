@@ -31,7 +31,7 @@ if (!isset($_SESSION["account"])) {
 
   //ここにMysqlを使った処理を書く
   //記事の削除
-  if ($_POST['submit_blog_delete']) {
+  if (isset($_POST['submit_blog_delete'])) {
     $sql = 'DELETE FROM post WHERE id=?';
     $statement = mysqli_prepare($database, $sql);
     mysqli_stmt_bind_param($statement, 'i', $_POST['post_id']);
