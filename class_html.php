@@ -31,7 +31,7 @@ class HTML {
           </div>
           <nav>
             <ul>
-              <li><a href="./t_post.php">記事投稿</a></li>
+              <li><a href="./post.php">記事投稿</a></li>
               <li>login user:<?php $account = $_SESSION['account']; print h($account); ?></li>
               <li><a href='./logout.php'>ログアウトする</a></li>
             </ul>
