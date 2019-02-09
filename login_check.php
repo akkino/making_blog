@@ -129,7 +129,7 @@
   $wrapper = ob_get_contents();
   ob_end_clean();
 
-  $htmlpage = $head . $header . $main . $footer;
+  $htmlpage = $head . $header . $wrapper . $footer;
 
   print $htmlpage;
 

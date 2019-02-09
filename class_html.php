@@ -10,7 +10,7 @@ class HTML {
       <html lang="ja">
         <head>
           <meta charset="utf-8">
-          <title>{ . $this->title . }</title>
+          <title><?php print h($this->title); ?></title>
           <link rel ="stylesheet" href="making_blog.css">
         </head>
     <?php
