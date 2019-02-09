@@ -73,7 +73,7 @@ if(count($errors) === 0) {
     //アカウントが一致
     if($row = $statement->fetch()){
 
-			$password_hash = $row[password];
+			$password_hash = $row['password'];
 
       //パスワードが一致
       if (password_verify($password, $password_hash)) {
