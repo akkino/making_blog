@@ -29,6 +29,7 @@ class HTML {
           <div id="logo">
             <a href="./index.php">making blog</a>
           </div>
+          <?php if (isset($_SESSION['account']): ?>
           <nav>
             <ul>
               <li><a href="./post.php">記事投稿</a></li>
@@ -36,23 +37,7 @@ class HTML {
               <li><a href='./logout.php'>ログアウトする</a></li>
             </ul>
           </nav>
-        </div>
-      </header>
-    <?php
-    $header = ob_get_contents();
-    ob_end_clean();
-
-    return $header;
-  }
-
-  public function HtmlHeader_notlogin() {
-    ob_start();
-    ?>
-      <header>
-        <div id="header">
-          <div id="logo">
-            <a href="./index.php">making blog</a>
-          </div>
+        <?php endif; ?>
         </div>
       </header>
     <?php

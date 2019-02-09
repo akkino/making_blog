@@ -109,7 +109,7 @@
   $html->title = "ログイン確認画面 | 自分のブログを作ってみよう！";
 
   $head = $html->HtmlHead();
-  $header = $html->HtmlHeader_notlogin();
+  $header = $html->HtmlHeader();
   $footer = $html->Htmlfooter();
 
   ob_start();

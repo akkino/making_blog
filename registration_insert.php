@@ -84,7 +84,7 @@
   $html->title = "会員登録完了画面 | 自分のブログを作ってみよう！";
 
   $head = $html->HtmlHead();
-  $header = $html->HtmlHeader_notlogin();
+  $header = $html->HtmlHeader();
   $footer = $html->Htmlfooter();
 
   ob_start();
