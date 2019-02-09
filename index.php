@@ -1,23 +1,17 @@
-<!DOCTYPE html>
 <?php
 
-session_start();
+  session_start();
 
-header("Content-type: text/html; charset=utf-8");
+  require_once "class_html.php";
+  require_once "class_main.php";
 
-//ログイン状態のチェック
-if (!isset($_SESSION["account"])) {
-  header("Location: login_form.php");
-  exit();
-}
+  header("Content-type: text/html; charset=utf-8");
 
-  function h($str) {
-    return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
-  }
+  login_check($_SESSION['account']);
 
-  require_once("db.php");
+
+  require_once "db.php";
   $dbh = db_connect();
-
 
   $errors = $blogs = array();
   $post_id = 0;
@@ -59,59 +53,51 @@ if (!isset($_SESSION["account"])) {
     }
   }
 
- ?>
 
-<html lang="ja">
-  <head>
-    <meta charset="utf-8">
-    <title>making_blog | 自分のブログを作ってみよう！</title>
-    <link rel ="stylesheet" href="making_blog.css">
-  </head>
-  <body>
-    <header>
-      <div id="header">
-        <div id="logo">
-          <a href="./index.php">making blog</a>
-        </div>
-        <nav>
-          <ul>
-            <li><a href="./t_post.php">記事投稿</a></li>
-            <li>login user:<?php $account = $_SESSION['account']; print h($account); ?></li>
-            <li><a href='logout.php'>ログアウトする</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-    <div id="cover">
-      <h1 id="cover_title">自分のブログを作ってみよう！</h1>
+  $html = new HTML;
 
-    </div>
-    <div class="wrapper">
-      <div id="main">
-        <div id="blog_list" class="clearfix">
+  $html->title = "making_blog | 自分のブログを作ってみよう！";
+
+  $head = $html->HtmlHead();
+  $header = $html->HtmlHeader();
+  $footer = $html->Htmlfooter();
+
+  ob_start();
+  ?>
+  <div id="cover">
+    <h1 id="cover_title">自分のブログを作ってみよう！</h1>
+
+  </div>
+  <div class="wrapper">
+    <div id="main">
+      <div id="blog_list" class="clearfix">
 <?php     foreach ($blogs as $blog_item) { ?>
-            <div class="blog_item">
-              <div class="blog_image">
-                <!-- ここにサムネ表示 -->
-              </div>
-              <div class="blog_detail">
-                <div class="blog_title">
-                  <form method="get" name="go_design" action="./design.php">
-                    <input type="hidden" name="psot_id" value="<?php print h($blog_item['id']); ?>">
-                    <a href="./design.php?post_id=<?php print h($blog_item['id']); ?>"><?php print h($blog_item['title']); ?></a>
-                  </form>
-                  <div class="blog_created_at">
-                    <?php print h($blog_item['created_at']); ?>
-                  </div>
+          <div class="blog_item">
+            <div class="blog_image">
+              <!-- ここにサムネ表示 -->
+            </div>
+            <div class="blog_detail">
+              <div class="blog_title">
+                <form method="get" name="go_design" action="./design.php">
+                  <input type="hidden" name="psot_id" value="<?php print h($blog_item['id']); ?>">
+                  <a href="./design.php?post_id=<?php print h($blog_item['id']); ?>"><?php print h($blog_item['title']); ?></a>
+                </form>
+                <div class="blog_created_at">
+                  <?php print h($blog_item['created_at']); ?>
                 </div>
               </div>
             </div>
-        <?php } ?>
-        </div>
+          </div>
+      <?php } ?>
       </div>
     </div>
-    <footer>
-      <small>© 2019 making blog.</small>
-    </footer>
-  </body>
-</html>
+  </div>
+  <?php
+  $main = ob_get_contents();
+  ob_end_clean();
+
+  $htmlpage = $head . $header . $main . $footer;
+
+  print $htmlpage;
+
+ ?>
