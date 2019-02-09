@@ -1,20 +1,16 @@
-<!DOCTYPE html>
 <?php
 
 session_start();
 
+require_once "class_html.php";
+require_once "class_main.php";
+
 header("Content-type: text/html; charset=utf-8");
 
-if (!isset($_SESSION["account"])) {
-  header("Location: login_form.php");
-  exit();
-}
+  login_check($_SESSION['account']);
 
-  function h($str) {
-    return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
-  }
 
-  require_once("db.php");
+  require_once "db.php";
   $dbh = db_connect();
 
   //blog_idの引継ぎ
@@ -86,73 +82,64 @@ if (!isset($_SESSION["account"])) {
     }
   }
 
- ?>
+  $html = new HTML;
 
-<html lang="ja">
-  <head>
-    <meta charset="utf-8">
-    <title>making_blog | 自分のブログを作ってみよう！</title>
-    <link rel ="stylesheet" href="making_blog.css">
-  </head>
-  <body>
-    <header>
-      <div id="header">
-        <div id="logo">
-          <a href="./index.php">making blog</a>
-        </div>
-        <nav>
-          <ul>
-            <li><a href="./t_post.php">記事投稿</a></li>
-            <li>login user:<?php $account = $_SESSION['account']; print h($account); ?></li>
-            <li><a href='logout.php'>ログアウトする</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-    <div class="wrapper">
-      <div id="main">
-        <div class="post">
-          <h2><?php print h($blog_post['title']); ?></h2>
-          <p><?php print h($blog_post['content']); ?></p>
-          <img src="<?php if(isset($blog_post['blog_imag'])): print h($blog_post['blog_image']); endif;?>" alt="">
-          <p>投稿日：<?php print h($blog_post['created_at']); ?></p>
+  $html->title = "making_blog | 自分のブログを作ってみよう！";
 
-          <?php if($blog_post['user_id'] == $_SESSION['user_id']) { ?>
-            <form action="index.php" method="post">
-              <input type="hidden" name="post_id" value="<?=$post_id?>">
-              <div class="blog_delete">
-                <input type="submit" name="submit_blog_delete" value="削除する"
-              </div>
-            </form>
-          <?php } ?>
+  $head = $html->HtmlHead();
+  $header = $html->HtmlHeader();
+  $footer = $html->Htmlfooter();
 
-          <?php foreach ($blog_comment as $comment) {?>
-            <div class="comment">
-              <h3><?php print h($comment['name']); ?></h3>
-              <p><?php print h($comment['content']); ?></p>
-              <p><?php print h($comment['created_at']); ?></p>
+  ob_start();
+  ?>
+  <div class="wrapper">
+    <div id="main">
+      <div class="post">
+        <h2><?php print h($blog_post['title']); ?></h2>
+        <p><?php print h($blog_post['content']); ?></p>
+        <img src="<?php if(isset($blog_post['blog_imag'])): print h($blog_post['blog_image']); endif;?>" alt="">
+        <p>投稿日：<?php print h($blog_post['created_at']); ?></p>
 
-              <?php if ($comment['user_id'] == $_SESSION['user_id']) { ?>
-                <form action="./design.php?post_id=<?php print h($blog_post['id']); ?>" method="post">
-                  <input type="hidden" name="comment_id" value="<?=$comment['id']?>">
-                  <div class="comment_delete">
-                    <input type="submit" name="submit_comment_delete" value="削除する"
-                  </div>
-                </form>
-              <?php } ?>
+        <?php if($blog_post['user_id'] == $_SESSION['user_id']) { ?>
+          <form action="index.php" method="post">
+            <input type="hidden" name="post_id" value="<?=$post_id?>">
+            <div class="blog_delete">
+              <input type="submit" name="submit_blog_delete" value="削除する"
             </div>
-          <?php } ?>
-          <p class="commment_link">
-            <form action="t_comment.php" mrthod="get" name="go_comment">
-              <input type="hidden" name="post_id" value="<?php print h($blog_post['id']); ?>">
-              <a href="t_comment.php?id=<?php print h($blog_post['id']); ?>">コメント</a>
-            </form>
-          </p>
-        </div>
+          </form>
+        <?php } ?>
+
+        <?php foreach ($blog_comment as $comment) {?>
+          <div class="comment">
+            <h3><?php print h($comment['name']); ?></h3>
+            <p><?php print h($comment['content']); ?></p>
+            <p><?php print h($comment['created_at']); ?></p>
+
+            <?php if ($comment['user_id'] == $_SESSION['user_id']) { ?>
+              <form action="./design.php?post_id=<?php print h($blog_post['id']); ?>" method="post">
+                <input type="hidden" name="comment_id" value="<?=$comment['id']?>">
+                <div class="comment_delete">
+                  <input type="submit" name="submit_comment_delete" value="削除する"
+                </div>
+              </form>
+            <?php } ?>
+          </div>
+        <?php } ?>
+        <p class="commment_link">
+          <form action="t_comment.php" mrthod="get" name="go_comment">
+            <input type="hidden" name="post_id" value="<?php print h($blog_post['id']); ?>">
+            <a href="t_comment.php?id=<?php print h($blog_post['id']); ?>">コメント</a>
+          </form>
+        </p>
       </div>
     </div>
-    <footer>
-      <small>© 2019 making blog.</small>
-    </footer>
-  </body>
-</html>
+  </div>
+  <?php
+  $wrapper = ob_get_contents();
+  ob_end_clean();
+
+  $htmlpage = $head . $header . $wrapper . $footer;
+
+  print $htmlpage;
+
+ ?>
