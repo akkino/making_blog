@@ -1,12 +1,12 @@
 <?php
 session_start();
 
+require_once "class_main.php";
+
 header("Content-type: text/html; charset=utf-8");
 
-if (!isset($_SESSION["account"])) {
-  header("Location: login_form.php");
-  exit();
-}
+login_check($_SESSION['account']);
+
 
   $errors = array();
   $title = $content = $user_id = $image_path = '';
@@ -28,7 +28,7 @@ if (!isset($_SESSION["account"])) {
       }
 
       //ブログを新規登録する
-      require_once("db.php");
+      require_once "db.php";
       $dbh = db_connect();
 
       try {
