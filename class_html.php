@@ -20,6 +20,7 @@ class HTML {
     return $head;
   }
 
+
   public function HtmlHeader() {
     ob_start();
     ?>
@@ -35,6 +36,23 @@ class HTML {
               <li><a href='./logout.php'>ログアウトする</a></li>
             </ul>
           </nav>
+        </div>
+      </header>
+    <?php
+    $header = ob_get_contents();
+    ob_end_clean();
+
+    return $header;
+  }
+
+  public function HtmlHeader_notlogin() {
+    ob_start();
+    ?>
+      <header>
+        <div id="header">
+          <div id="logo">
+            <a href="./index.php">making blog</a>
+          </div>
         </div>
       </header>
     <?php

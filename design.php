@@ -1,11 +1,11 @@
 <?php
 
-session_start();
+  session_start();
 
-require_once "class_html.php";
-require_once "class_main.php";
+  require_once "class_html.php";
+  require_once "class_main.php";
 
-header("Content-type: text/html; charset=utf-8");
+  header("Content-type: text/html; charset=utf-8");
 
   login_check($_SESSION['account']);
 
