@@ -74,7 +74,14 @@
 <?php     foreach ($blogs as $blog_item) { ?>
           <div class="blog_item">
             <div class="blog_image">
-              <!-- ここにサムネ表示 -->
+              <?php
+              if(isset($_SESSION['blog_image'])) {
+                $thumbnail = $_SESSION['blog_image'];
+              } else {
+                $thumbnail = 'uploads/Noimage.png';
+              }
+              ?>
+              <img src="<?php print h($thumbnail); ?>" alt="">
             </div>
             <div class="blog_detail">
               <div class="blog_title">
