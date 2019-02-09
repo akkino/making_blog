@@ -29,7 +29,7 @@ class HTML {
           <div id="logo">
             <a href="./index.php">making blog</a>
           </div>
-          <?php if (isset($_SESSION['account']): ?>
+<?php if (isset($_SESSION['account'])) { ?>
           <nav>
             <ul>
               <li><a href="./post.php">記事投稿</a></li>
@@ -37,7 +37,7 @@ class HTML {
               <li><a href='./logout.php'>ログアウトする</a></li>
             </ul>
           </nav>
-        <?php endif; ?>
+<?php } ?>
         </div>
       </header>
     <?php
