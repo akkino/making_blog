@@ -128,7 +128,7 @@
         <p class="commment_link">
           <form action="t_comment.php" mrthod="get" name="go_comment">
             <input type="hidden" name="post_id" value="<?php print h($blog_post['id']); ?>">
-            <a href="t_comment.php?id=<?php print h($blog_post['id']); ?>">コメント</a>
+            <a href="comment.php?id=<?php print h($blog_post['id']); ?>">コメント</a>
           </form>
         </p>
       </div>
