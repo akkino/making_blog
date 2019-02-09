@@ -1,12 +1,12 @@
 <?php
-session_start();
+  session_start();
 
-header("Content-type: text/html; charset=utf-8");
+  require_once "class_main.php";
 
-if (!isset($_SESSION["account"])) {
-  header("Location: login_form.php");
-  exit();
-}
+  header("Content-type: text/html; charset=utf-8");
+
+  login_check($_SESSION['account']);
+
 
   $errors = array();
   $post_id = $user_id = $name = $content = '';
