@@ -15,35 +15,50 @@ if (!isset($_SESSION["account"])) {
     return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
   }
 
-  $host = 'localhost';
-  $username = 'root';
-  $password = '';
-  $db_name = 'making_blog';
+  require_once("db.php");
+  $dbh = db_connect();
 
-  $database = mysqli_connect($host, $username, $password, $db_name);
 
-  if ($database == false) {
-    die('Connect Error (' . mysqli_connect_errno() . ')' .mysqli_connect_error());
+  $errors = $blogs = array();
+  $post_id = 0;
+
+  if (count($errors) === 0) {
+    //記事の削除
+    if (isset($_POST['submit_blog_delete'])) {
+      try {
+        $post_id = $_POST['post_id'];
+
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $statement = $dbh->prepare("DELETE FROM post WHERE id=(:post_id)");
+        $statement->bindValue(':post_id', $post_id, PDO::PARAM_INT);
+        $statement->execute();
+
+        $statement = null;
+      }
+      catch (PDOException $e) {
+        print('Error:' . $e->getMessage());
+        die();
+      }
+    }
+
+    //全ての記事の取得
+    try {
+      $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+      $statement = $dbh->prepare("SELECT * FROM post ORDER BY created_at DESC");
+      $statement->execute();
+
+      $blogs = $statement->fetchALL();
+
+      $dbh = null;
+    }
+    catch (PDOException $e) {
+      print('Error:' . $e->getMessage());
+      die();
+    }
   }
 
-  $charset = '$utf8';
-  mysqli_set_charset($database, $charset);
-
-  //ここにMysqlを使った処理を書く
-  //記事の削除
-  if (isset($_POST['submit_blog_delete'])) {
-    $sql = 'DELETE FROM post WHERE id=?';
-    $statement = mysqli_prepare($database, $sql);
-    mysqli_stmt_bind_param($statement, 'i', $_POST['post_id']);
-    mysqli_stmt_execute($statement);
-    mysqli_stmt_close($statement);
-  }
-
-  //全ての記事の取得
-  $sql = 'SELECT * FROM post ORDER BY created_at DESC';
-  $result = mysqli_query($database, $sql);
-
-  mysqli_close($database);
  ?>
 
 <html lang="ja">
@@ -74,41 +89,24 @@ if (!isset($_SESSION["account"])) {
     <div class="wrapper">
       <div id="main">
         <div id="blog_list" class="clearfix">
-<?php
-          if ($result) {
-            while ($record = mysqli_fetch_assoc($result)) {
-              $id = $record['id'];
-              $title = $record['title'];
-              $created_at = $record['created_at'];
-?>
-              <div class="blog_item">
-                <div class="blog_image">
-
-                </div>
-                <div class="blog_detail">
-                  <div class="blog_title">
-                    <form method="get" name="go_design" action="./design.php">
-                      <input type="hidden" name="post_id" value="<?php print h($id); ?>">
-                      <a href="./design.php?post_id=<?php print h($id); ?>"><?php print h($title); ?></a>
-                    </form>
-                  </div>
-                  <form action="index.php" method="post">
-                    <input type="hidden" name="post_id" value="<?php print h($id); ?>">
-                    <div class="blog_delete">
-                      <input type="submit" name="submit_blog_delete" value="削除する">
-                    </div>
+<?php     foreach ($blogs as $blog_item) { ?>
+            <div class="blog_item">
+              <div class="blog_image">
+                <!-- ここにサムネ表示 -->
+              </div>
+              <div class="blog_detail">
+                <div class="blog_title">
+                  <form method="get" name="go_design" action="./design.php">
+                    <input type="hidden" name="psot_id" value="<?php print h($blog_item['id']); ?>">
+                    <a href="./design.php?post_id=<?php print h($blog_item['id']); ?>"><?php print h($blog_item['title']); ?></a>
                   </form>
                   <div class="blog_created_at">
-                    <?php print h($created_at); ?>
+                    <?php print h($blog_item['created_at']); ?>
                   </div>
                 </div>
               </div>
-<?php
-            }
-            mysqli_free_result($result);
-          }
-?>
-          </form>
+            </div>
+        <?php } ?>
         </div>
       </div>
     </div>

@@ -115,6 +115,7 @@ if (!isset($_SESSION["account"])) {
           <h2><?php print h($blog_post['title']); ?></h2>
           <p><?php print h($blog_post['content']); ?></p>
           <img src="<?php if(isset($blog_post['blog_imag'])): print h($blog_post['blog_image']); endif;?>" alt="">
+          <p>投稿日：<?php print h($blog_post['created_at']); ?></p>
 
           <?php if($blog_post['user_id'] == $_SESSION['user_id']) { ?>
             <form action="index.php" method="post">
@@ -139,8 +140,6 @@ if (!isset($_SESSION["account"])) {
                   </div>
                 </form>
               <?php } ?>
-              <p>投稿日：<?php print h($blog_post['created_at']); ?></p>
-
             </div>
           <?php } ?>
           <p class="commment_link">
