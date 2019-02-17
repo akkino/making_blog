@@ -119,7 +119,7 @@
               <form action="./design.php?post_id=<?php print h($blog_post['id']); ?>" method="post">
                 <input type="hidden" name="comment_id" value="<?=$comment['id']?>">
                 <div class="comment_delete">
-                  <input type="submit" name="submit_comment_delete" value="削除する"
+                  <input type="submit" name="submit_comment_delete" value="削除する">
                 </div>
               </form>
             <?php } ?>
