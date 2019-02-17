@@ -59,6 +59,29 @@ header nav a {
     margin: 20px auto;
 }
 
+.blog_item {
+  width: 270px;
+  margin: 15px;
+  float: left;
+  background-color: white;
+  border: solid 1px #ddd;
+}
+
+.blog_item .blog_image {
+  width: 270px;
+  height: 270px;
+  padding: 10px;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.blog_item .blog_image img {
+  max-height: 250px;
+  max-width: 250px;
+  vertical-align: middle;
+}
+
 footer {
     padding: 20px 0;
     text-align: center;
